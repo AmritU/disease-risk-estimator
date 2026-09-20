@@ -99,7 +99,7 @@ if st.button("Generate Comprehensive Risk Report", type="primary", use_container
         }])
         
         # 2. Predict for each model
-        d_risk = float(round(d_model.predict_proba(d_scaler.transform(d_data))[0][1] * 100, 2))
+        d_risk = float(round(d_model.predict_proba(d_data)[0][1] * 100, 2))
         h_risk = float(round(h_model.predict_proba(h_scaler.transform(h_data))[0][1] * 100, 2))
         k_risk = float(round(k_model.predict_proba(k_scaler.transform(k_data))[0][1] * 100, 2))
         
