@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import joblib
 import pandas as pd
@@ -19,19 +20,22 @@ db = client.healthcare_app
 predictions_collection = db.predictions
 
 # --- 2. LOAD ALL MODELS ---
+# 1. Dynamically find the absolute directory where app.py lives
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+# 2. Define the exact path to the models folder
+MODELS_DIR = os.path.join(CURRENT_DIR, '../models')
+
 @st.cache_resource
 def load_models():
-    # Diabetes
-    d_model = joblib.load('../models/diabetes_model.pkl')
-    d_scaler = joblib.load('../models/standard_scaler.pkl')
+    # Load all files using the dynamic MODELS_DIR path
+    d_model = joblib.load(os.path.join(MODELS_DIR, 'diabetes_model.pkl'))
+    d_scaler = joblib.load(os.path.join(MODELS_DIR, 'diabetes_scaler.pkl'))
     
-    # Heart
-    h_model = joblib.load('../models/heart_model.pkl')
-    h_scaler = joblib.load('../models/heart_scaler.pkl')
+    h_model = joblib.load(os.path.join(MODELS_DIR, 'heart_model.pkl'))
+    h_scaler = joblib.load(os.path.join(MODELS_DIR, 'heart_scaler.pkl'))
     
-    # Kidney
-    k_model = joblib.load('../models/kidney_model.pkl')
-    k_scaler = joblib.load('../models/kidney_scaler.pkl')
+    k_model = joblib.load(os.path.join(MODELS_DIR, 'kidney_model.pkl'))
+    k_scaler = joblib.load(os.path.join(MODELS_DIR, 'kidney_scaler.pkl'))
     
     return d_model, d_scaler, h_model, h_scaler, k_model, k_scaler
 
