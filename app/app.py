@@ -27,19 +27,20 @@ MODELS_DIR = os.path.join(CURRENT_DIR, '../models')
 
 @st.cache_resource
 def load_models():
-    # Load all files using the dynamic MODELS_DIR path
+    # Load the XGBoost model (no scaler needed)
     d_model = joblib.load(os.path.join(MODELS_DIR, 'diabetes_model.pkl'))
-    d_scaler = joblib.load(os.path.join(MODELS_DIR, 'diabetes_scaler.pkl'))
     
+    # Load the Random Forest models and their scalers
     h_model = joblib.load(os.path.join(MODELS_DIR, 'heart_model.pkl'))
     h_scaler = joblib.load(os.path.join(MODELS_DIR, 'heart_scaler.pkl'))
     
     k_model = joblib.load(os.path.join(MODELS_DIR, 'kidney_model.pkl'))
     k_scaler = joblib.load(os.path.join(MODELS_DIR, 'kidney_scaler.pkl'))
     
-    return d_model, d_scaler, h_model, h_scaler, k_model, k_scaler
+    return d_model, h_model, h_scaler, k_model, k_scaler
 
-d_model, d_scaler, h_model, h_scaler, k_model, k_scaler = load_models()
+# Update line 42 where you call the function so the variables match:
+d_model, h_model, h_scaler, k_model, k_scaler = load_models()
 
 # --- 3. UI LAYOUT ---
 st.title("🩺 Multi-Disease Risk Dashboard")
