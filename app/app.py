@@ -39,7 +39,6 @@ def load_models():
     
     return d_model, h_model, h_scaler, k_model, k_scaler
 
-# Update line 42 where you call the function so the variables match:
 d_model, h_model, h_scaler, k_model, k_scaler = load_models()
 
 # --- 3. UI LAYOUT ---
@@ -82,12 +81,13 @@ if st.button("Generate Comprehensive Risk Report", type="primary", use_container
         time.sleep(0.5)
         
         # 1. Format data arrays exactly as the separate models expect them
-        d_data = pd.DataFrame([{
-            'Glucose': glucose, 'BMI': bmi, 
-            'Gender_Male': 1 if gender == "Male" else 0,
-            'Smoking_Status_Former': 1 if smoking == "Former" else 0,
-            'Smoking_Status_Never': 1 if smoking == "Never" else 0
-        }])
+        gender_encoded = 1 if gender == "Male" else 0
+        smoking_encoded = 0 if smoking == "Never" else 1
+
+        d_data = pd.DataFrame(
+            [[glucose, bmi, gender_encoded, smoking_encoded]], 
+            columns=['Glucose', 'BMI', 'Gender_Male', 'Smoking_History']
+        )
         
         h_data = pd.DataFrame([{
             'Age': age, 'Cholesterol': cholesterol, 
@@ -151,8 +151,6 @@ with st.expander("View Past Predictions", expanded=True):
                     "Heart Risk (%)": r.get("heart_risk", 0),
                     "Kidney Risk (%)": r.get("kidney_risk", 0),
                     
-                    # --- THE FIX ---
-                    # Replaced "N/A" with None so PyArrow can handle missing numbers
                     "Age": vitals.get("age", None),
                     "BMI": vitals.get("bmi", None),
                     "BP": vitals.get("blood_pressure", None),
